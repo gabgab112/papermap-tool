@@ -3,65 +3,67 @@
 
   <div class="formSection">
     <v-card class="formCard rounded-card" variant="tonal">
-      <v-form>
-        <v-row>
-          <v-col cols="12" md="6">
-            <!-- Map Name -->
-            <v-text-field v-model="mapTitle" label="Map Name"></v-text-field>
-          </v-col>
+      <v-row>
+        <v-col cols="12" md="6">
+          <!-- Map Name -->
+          <v-text-field v-model="mapTitle" label="Map Name"></v-text-field>
+        </v-col>
 
-          <v-col cols="12" md="6">
-            <!-- Size -->
-            <v-text-field v-model="size" label="Units"></v-text-field>
-          </v-col>
-        </v-row>
+        <v-col cols="12" md="6">
+          <!-- Size -->
+          <v-text-field v-model="size" label="Units"></v-text-field>
+        </v-col>
+      </v-row>
 
-        <!-- Description -->
-        <v-textarea rows="3" v-model="description" label="Description"></v-textarea>
+      <!-- Description -->
+      <v-textarea rows="3" v-model="description" label="Description"></v-textarea>
 
-        <!-- Gameplay -->
-        <v-textarea rows="3" v-model="gameplay" label="Gameplay Hooks"></v-textarea>
+      <!-- Gameplay -->
+      <v-textarea rows="3" v-model="gameplay" label="Gameplay Hooks"></v-textarea>
 
-        <!-- POI -->
-        <v-text class="text-h5">Points of interest</v-text>
-        <br>
+      <!-- POI -->
+      <v-text class="text-h5">Points of interest</v-text>
+      <br>
 
-        <!-- Create POI -->
-        <v-dialog v-model="POI_dialog" width="auto">
-          <template v-slot:activator="{ props }">
-            <v-btn color="primary" v-bind="props" prepend-icon="mdi-plus">
-              Create POI
-            </v-btn>
-          </template>
+      <!-- Create POI -->
+      <v-dialog v-model="POI_dialog" width="auto">
+        <template v-slot:activator="{ props }">
+          <v-btn color="primary" v-bind="props" prepend-icon="mdi-plus">
+            Create POI
+          </v-btn>
+        </template>
 
-          <v-card width="900">
-            <v-form class="pa-8">
-              <v-row>
-                <v-col cols="6">
+        <v-card width="900">
+          <v-form class="pa-8">
+            <v-row>
+              <v-col cols="6">
 
-                  <!-- POI Name -->
-                  <v-text-field v-model="POITitle" label="POI Name"></v-text-field>
+                <!-- POI Name -->
+                <v-text-field v-model="POITitle" label="POI Name"></v-text-field>
 
-                  <!-- Letter -->
-                  <v-select item-title="state" item-value="abbr" v-model="letterSelected" chips label="Select" :items="['A', 'B', 'C', 'D', 'E', 'F']"></v-select>
+                <!-- Letter -->
+                <v-select v-model="letterSelected" chips label="Select"
+                  :items="['A', 'B', 'C', 'D', 'E', 'F']"></v-select>
 
-                  <!-- Image upload -->
-                  <v-file-input label="File input" variant="filled" prepend-icon="mdi-camera"></v-file-input>
+                <!-- Image upload -->
+                <!--<v-file-input clearable v-model="POI_Files" label="POI Image" variant="filled" prepend-icon="mdi-camera"
+                  @change="onFileChange($event, index)"></v-file-input> -->
 
-                  <v-btn color="primary" @click="generateNewPOI" prepend-icon="mdi-plus">
-                    Generate New POI
-                  </v-btn>
+                <v-file-input v-model="POI_Files" chips label="POI Image" @change="onFileChange($event)"></v-file-input>
 
-                </v-col>
-              </v-row>
-            </v-form>
-            <v-card-actions>
-              <v-btn color="primary" block @click="POI_dialog = false">Close</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
 
-      </v-form>
+                <v-btn color="primary" @click="generateNewPOI" prepend-icon="mdi-plus">
+                  Generate New POI
+                </v-btn>
+
+              </v-col>
+            </v-row>
+          </v-form>
+          <v-card-actions>
+            <v-btn color="primary" block @click="POI_dialog = false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </div>
 
@@ -117,7 +119,6 @@
     </v-card>
   </div>
 
-
   <div>
     <v-btn class="printButton" @click="printElement" prepend-icon="mdi-download" color="primary">
       Print Div
@@ -150,6 +151,8 @@ export default {
       POI_D: '',
       POI_E: '',
       POI_F: '',
+
+      POI_Files: '',
     }
   },
   methods: {
@@ -178,7 +181,7 @@ export default {
 
       // Add image
       const img = document.createElement("img");
-      img.src = "./assets/defaultimg.png";
+      img.src = this.POI_Files[0];
       img.style = "width: 5vw; display: block;";
       newDiv.appendChild(img);
 
@@ -186,7 +189,20 @@ export default {
       var currentDiv = document.getElementById("divToAttach");
       currentDiv.parentNode.insertBefore(newDiv, currentDiv);
     },
+    onFileChange(e) {
+      
+
+
+      var files = e.target.files;
+
+
+      if (!files.length)
+        return;
+
+      this.POI_Files.splice(0, 1, URL.createObjectURL(files[0]));
+    },
   }
+
 }
 </script>
 
