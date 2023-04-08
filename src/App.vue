@@ -1,7 +1,7 @@
 <template>
   <v-img class="battlemap_logo" src="./assets/battlemapLogo_large.png" />
 
-  <v-card class="formCard rounded-card" variant="tonal">
+  <v-card class="rounded-card elevation-0" color="#151515" style="color: white;">
     <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
       <v-tab :value="1">Tool</v-tab>
       <v-tab :value="2">Documentation</v-tab>
@@ -135,7 +135,7 @@
       <v-window-item :value="2">
 
         <!-- Tab 2 -->
-        <h1>tab 2</h1>
+        <h1>Documentation</h1>
 
       </v-window-item>
     </v-window>
@@ -282,9 +282,9 @@ body {
 
 .contentSection {
   text-align: left;
-  margin-top: 20px;
+  margin-top: 4vw;
   margin-left: 25%;
-  margin-right: 25%;
+  margin-right: 25%; 
 }
 
 .formCard {
