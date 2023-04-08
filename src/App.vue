@@ -1,7 +1,16 @@
 <template>
-  <h1>Papermap Tool</h1>
+  <v-img class="battlemap_logo" src="./assets/battlemapLogo_large.png" />
 
-  <div class="formSection">
+  <v-card class="formCard rounded-card" variant="tonal">
+    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+      <v-tab :value="1">Tool</v-tab>
+      <v-tab :value="2">Documentation</v-tab>
+    </v-tabs>
+    <v-window v-model="tab">
+      <v-window-item :value="1">
+
+        <!-- Tab 1 -->
+        <div class="formSection">
     <v-card class="formCard rounded-card" variant="tonal">
       <v-row>
         <v-col cols="12" md="6">
@@ -22,8 +31,7 @@
       <v-textarea rows="3" v-model="gameplay" label="Gameplay Hooks"></v-textarea>
 
       <!-- POI -->
-      <v-text class="text-h5">Points of interest</v-text>
-      <br>
+      <div class="">Points of interest</div>
 
       <!-- Create POI -->
       <v-dialog v-model="POI_dialog" width="auto">
@@ -34,7 +42,7 @@
         </template>
 
         <v-card width="900">
-          <v-form class="pa-8">
+          <v-form class="pa-8" ref="POIDialogForm">
             <v-row>
               <v-col cols="6">
 
@@ -46,11 +54,8 @@
                   :items="['A', 'B', 'C', 'D', 'E', 'F']"></v-select>
 
                 <!-- Image upload -->
-                <!--<v-file-input clearable v-model="POI_Files" label="POI Image" variant="filled" prepend-icon="mdi-camera"
-                  @change="onFileChange($event, index)"></v-file-input> -->
-
-                <v-file-input v-model="POI_Files" chips label="POI Image" @change="onFileChange($event)"></v-file-input>
-
+                <v-file-input type="file" :id="'test' + i" chips label="POI Image"
+                  @change="onFileChange($event, i)"></v-file-input>
 
                 <v-btn color="primary" @click="generateNewPOI" prepend-icon="mdi-plus">
                   Generate New POI
@@ -110,6 +115,7 @@
             <v-sheet class="text-white" color="grey-darken-4">
               <v-row no-gutters>
                 <div id="divToAttach"></div>
+
               </v-row>
             </v-sheet>
           </v-col>
@@ -125,6 +131,18 @@
     </v-btn>
   </div>
 
+      </v-window-item>
+      <v-window-item :value="2">
+
+        <!-- Tab 2 -->
+        <h1>tab 2</h1>
+
+      </v-window-item>
+    </v-window>
+  </v-card>
+
+  
+
   <!-- <v-text class="text-overline">@Gabriel Bissonnette 2023</v-text> -->
 </template>
 
@@ -135,6 +153,8 @@ export default {
   name: 'App',
   data() {
     return {
+      tab: null,
+
       mapTitle: '',
       size: '',
       description: '',
@@ -152,7 +172,13 @@ export default {
       POI_E: '',
       POI_F: '',
 
-      POI_Files: '',
+      image: [],
+      i: '',
+
+      poi_letters: new Array(),
+      poi_title: new Array(),
+      poi_images: new Array(),
+      poi_index: 0,
     }
   },
   methods: {
@@ -170,36 +196,54 @@ export default {
       });
     },
     generateNewPOI() {
+      // Save values
+      this.poi_letters.push(this.letterSelected);
+      this.poi_title.push(this.POITitle);
+
+      // Close dialog window
+      this.POI_dialog = false;
+
       // create a new div element
       const newDiv = document.createElement("div");
 
       // and give it some content
-      const newContent = document.createTextNode("PERMANENT " + this.letterSelected);
+      const newContent = document.createTextNode(this.poi_letters[this.poi_index] + ". " + this.poi_title[this.poi_index]);
 
       // add the text node to the newly created div
       newDiv.appendChild(newContent);
 
       // Add image
       const img = document.createElement("img");
-      img.src = this.POI_Files[0];
+
+      console.log(this.poi_images[this.poi_index])
+
+      img.src = this.poi_images[this.poi_index];
       img.style = "width: 5vw; display: block;";
       newDiv.appendChild(img);
 
       // add the newly created element and its content into the DOM
       var currentDiv = document.getElementById("divToAttach");
       currentDiv.parentNode.insertBefore(newDiv, currentDiv);
+
+      // Increment index
+      this.poi_index++;
+
+      // Reset form
+      this.$refs.POIDialogForm.reset();
     },
     onFileChange(e) {
-      
-
-
-      var files = e.target.files;
-
-
+      var files = e.target.files || e.dataTransfer.files;
       if (!files.length)
         return;
 
-      this.POI_Files.splice(0, 1, URL.createObjectURL(files[0]));
+      this.poi_images.push(URL.createObjectURL(files[0]));
+
+      for (let i = 0; i < this.poi_images.length; i++) {
+        console.log(this.poi_images[i])
+      }
+    },
+    resetPOIDialogForm() {
+      this.$refs.POIDialogForm.reset()
     },
   }
 
@@ -212,12 +256,21 @@ body {
 }
 
 #app {
-  font-family: Montserrat, Montserrat, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #ffffff;
   margin-top: 60px;
+}
+
+.battlemap_logo {
+  width: 19vw;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 2vw;
 }
 
 .formSection {
