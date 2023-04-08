@@ -40,29 +40,29 @@
                 </v-btn>
               </template>
 
-              <v-card width="900">
+              <v-card width="900" class="rounded-card">
                 <v-form class="pa-8" ref="POIDialogForm">
-                  <v-row>
-                    <v-col cols="6">
+                  <v-col cols="12">
 
-                      <!-- POI Name -->
-                      <v-text-field v-model="POITitle" label="POI Name"></v-text-field>
+                    <h1>POI {{ lettersGroup[poi_index] }}</h1>
 
-                      <!-- Letter -->
-                      <v-select v-model="letterSelected" chips label="Select"
-                        :items="['A', 'B', 'C', 'D', 'E', 'F']"></v-select>
+                    <!-- POI Name -->
+                    <v-text-field v-model="POITitle" label="Name"></v-text-field>
 
-                      <!-- Image upload -->
-                      <v-file-input type="file" :id="'test' + i" chips label="POI Image"
-                        @change="onFileChange($event, i)"></v-file-input>
+                    <!-- Letter
+<v-select v-model="letterSelected" disabled chips label="Select"
+  :items="['A', 'B', 'C', 'D', 'E', 'F']"></v-select> -->
 
-                      <v-btn @click="generateNewPOI" size="large" rounded="xl" color="primary" v-bind="props"
-                        prepend-icon="mdi-plus">
-                        Generate New POI
-                      </v-btn>
+                    <!-- Image upload -->
+                    <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
+                      @change="onFileChange($event, i)"></v-file-input>
 
-                    </v-col>
-                  </v-row>
+                    <v-btn @click="generateNewPOI" size="large" rounded="xl" color="primary" v-bind="props"
+                      prepend-icon="mdi-plus">
+                      Generate New POI
+                    </v-btn>
+
+                  </v-col>
                 </v-form>
                 <v-card-actions>
                   <v-btn color="primary" block @click="POI_dialog = false">Close</v-btn>
@@ -113,7 +113,7 @@
                 </v-col>
 
                 <v-col cols="6">
-                  <v-sheet class="text-white" color="grey-darken-4">
+                  <v-sheet class="text-white ml-3" color="grey-darken-4">
                     <v-row no-gutters>
                       <div id="divToAttach"></div>
 
@@ -165,7 +165,6 @@ export default {
 
       POI_dialog: false,
       POITitle: '',
-      letterSelected: '',
 
       POI_A: '',
       POI_B: '',
@@ -177,10 +176,11 @@ export default {
       image: [],
       i: '',
 
-      poi_letters: new Array(),
       poi_title: new Array(),
       poi_images: new Array(),
       poi_index: 0,
+
+      lettersGroup: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'],
     }
   },
   methods: {
@@ -199,7 +199,6 @@ export default {
     },
     generateNewPOI() {
       // Save values
-      this.poi_letters.push(this.letterSelected);
       this.poi_title.push(this.POITitle);
 
       // Close dialog window
@@ -209,7 +208,7 @@ export default {
       const newDiv = document.createElement("div");
 
       // and give it some content
-      const newContent = document.createTextNode(this.poi_letters[this.poi_index] + ". " + this.poi_title[this.poi_index]);
+      const newContent = document.createTextNode(this.lettersGroup[this.poi_index] + ". " + this.poi_title[this.poi_index]);
 
       // add the text node to the newly created div
       newDiv.appendChild(newContent);
@@ -220,7 +219,7 @@ export default {
       console.log(this.poi_images[this.poi_index])
 
       img.src = this.poi_images[this.poi_index];
-      img.style = "width: 5vw; display: block;";
+      img.style = "width: 11vw; display: block; margin-right: 0.7vw;";
       newDiv.appendChild(img);
 
       // add the newly created element and its content into the DOM
@@ -332,7 +331,7 @@ body {
 }
 
 .content_mainCapsule {
-  width: 25vw;
+  width: 25.8vw;
 }
 
 .content_mapName {
