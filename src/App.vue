@@ -8,34 +8,67 @@
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item :value="1">
+
+
+
+
+
+
+
+
         <!-- Tab 1 -->
         <div class="formSection">
           <v-card class="formCard rounded-card" variant="tonal">
-            <v-row>
-              <v-col cols="12" md="6">
-                <!-- Map Name -->
-                <v-text-field v-model="mapTitle" label="Map Name"></v-text-field>
-              </v-col>
 
-              <v-col cols="12" md="6">
-                <!-- Size -->
-                <v-text-field v-model="size" label="Units"></v-text-field>
+            <div class="form_Title">Map Details</div>
+
+            <v-row>
+              <v-col cols="6">
+                <v-sheet class="pa-2" color="#151515" theme="dark">
+                  <!-- Texts -->
+                  <v-row>
+                    <v-col cols="6">
+                      <!-- Map Name -->
+                      <v-text-field v-model="mapTitle" label="Map Name"></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <!-- Size -->
+                      <v-text-field v-model="size" label="Units"></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <!-- Description -->
+                  <v-textarea v-model="description" label="Description" rows="3"></v-textarea>
+
+                  <!-- Gameplay -->
+                  <v-textarea v-model="gameplay" label="Gameplay Hooks" rows="5"></v-textarea>
+
+                </v-sheet>
+              </v-col>
+              <v-col cols="6">
+                <v-sheet class="pa-2" color="#151515" theme="dark">
+
+                  <!-- Images -->
+                  <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
+                    @change="onFileChange($event, i)"></v-file-input>
+
+                  <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
+                    @change="onFileChange($event, i)"></v-file-input>
+
+                </v-sheet>
               </v-col>
             </v-row>
 
-            <!-- Description -->
-            <v-textarea rows="3" v-model="description" label="Description"></v-textarea>
 
-            <!-- Gameplay -->
-            <v-textarea rows="3" v-model="gameplay" label="Gameplay Hooks"></v-textarea>
+
 
             <!-- POI -->
-            <div style="margin-top: 0.8vw; margin-bottom: 0.3vw;">Points of interest</div>
+            <div class="form_Title" style="margin-top: 0.5vw;">Points of interest</div>
 
             <!-- Create POI -->
             <v-dialog v-model="POI_dialog" width="auto">
               <template v-slot:activator="{ props }">
-                <v-btn size="large" rounded="xl" color="primary" v-bind="props" prepend-icon="mdi-plus">
+                <v-btn size="large" rounded="xl" color="primary" v-bind="props" prepend-icon="mdi-plus"
+                  style="margin-bottom: 0.5vw;">
                   Create POI
                 </v-btn>
               </template>
@@ -57,7 +90,7 @@
                     <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
                       @change="onFileChange($event, i)"></v-file-input>
 
-                    <v-btn @click="generateNewPOI" size="large" rounded="xl" color="primary" v-bind="props"
+                    <v-btn @click="generateNewPOI" block size="large" rounded="xl" color="primary" v-bind="props"
                       prepend-icon="mdi-plus">
                       Generate New POI
                     </v-btn>
@@ -361,5 +394,10 @@ body {
 
 .squared-card {
   border-radius: 0px;
+}
+
+.form_Title {
+  margin-bottom: 0.3vw;
+  font-size: 0.7vw;
 }
 </style>
