@@ -2,165 +2,197 @@
   <v-img class="battlemap_logo" src="./assets/battlemapLogo_large.png" />
 
   <v-card class="rounded-card elevation-0 pa-0" color="#151515" style="color: white;">
-    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center" style="margin-bottom: 1rem;">
       <v-tab :value="1">Tool</v-tab>
       <v-tab :value="2">Documentation</v-tab>
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item :value="1">
 
-        <!-- Tab 1 -->
-        <div class="formSection">
-          <v-card class="formCard rounded-card" variant="tonal">
+        <v-row no-gutters class="text-left">
+          <v-col cols="12" lg="6" md="4">
+            <v-responsive :aspect-ratio="16 / 9" class="pa-4 elevation-0" content-class="bg-primary">
 
-            <div class="form_Title">Map Details</div>
-
-            <v-row>
-              <v-col cols="6">
-                <v-sheet class="pa-2" color="#151515" theme="dark">
-                  <!-- Texts -->
-                  <v-row>
-                    <v-col cols="6">
-                      <!-- Map Name -->
-                      <v-text-field v-model="mapTitle" label="Map Name"></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                      <!-- Size -->
-                      <v-text-field v-model="size" label="Units"></v-text-field>
-                    </v-col>
-                  </v-row>
-                  <!-- Description -->
-                  <v-textarea v-model="description" label="Description" rows="3"></v-textarea>
-
-                  <!-- Gameplay -->
-                  <v-textarea v-model="gameplay" label="Gameplay Hooks" rows="5"></v-textarea>
-
-                </v-sheet>
-              </v-col>
-              <v-col cols="6">
-                <v-sheet class="pa-2" color="#151515" theme="dark">
-
-                  <!-- Images -->
-                  <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
-                    @change="onFileChange($event, i)"></v-file-input>
-
-                  <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
-                    @change="onFileChange($event, i)"></v-file-input>
-
-                </v-sheet>
-              </v-col>
-            </v-row>
+              <!-- Export -->
+              <div ref="printMe">
+                <v-card width=" 100%" color="grey-darken-4" class="squared-card elevation-0">
+                  <v-card-text>
+                    <v-row no-gutters>
 
 
+                      <v-col cols="12">
+                        <v-sheet class="pa-2 text-white" color="grey-darken-4">
+                          <!-- Map Name -->
+                          <p class="content_mapName font-weight-medium" v-if="mapTitle == ''">Map Name</p>
+                          <p class="content_mapName" v-else>{{ mapTitle }}</p>
+                        </v-sheet>
+                      </v-col>
+
+                      <v-col cols="6">
+                        <v-sheet class="pa-2 text-white" color="grey-darken-4">
+                          <!-- Main Capsule -->
+                          <v-img class="content_mainCapsule" src="" id="mainCapsule"/>
+
+                          <!-- Size -->
+                          <p class="content_subtitle font-weight-medium" style="margin-top: 0.8rem;">Size</p>
+                          <p class="content_size" v-if="size == ''">0 units x 0 units</p>
+                          <p class="content_size" v-else>{{ size }}</p>
+
+                          <!-- Description -->
+                          <p class="content_subtitle font-weight-medium" style="margin-top: 2rem;">Description</p>
+                          <div class="content_container">
+                            <p class="content_size" v-if="description == ''" style="white-space: pre-line">This is a
+                              description
+                            </p>
+                            <p class="content_size" v-else style="white-space: pre-line">{{ description }}</p>
+                          </div>
+
+                          <!-- Gameplay Hooks -->
+                          <p class="content_subtitle font-weight-medium" style="margin-top: 2rem;">Gameplay Hooks</p>
+                          <div style="height: 3.55vw;">
+                            <p class="content_size" v-if="gameplay == ''" style="white-space: pre-line">This is a hook</p>
+                            <p class="content_size" v-else style="white-space: pre-line">{{ gameplay }}</p>
+                          </div>
+                        </v-sheet>
+                      </v-col>
+
+                      <v-col cols="6">
+                        <v-sheet class="text-white ml-2" color="grey-darken-4">
+                          <v-row no-gutters>
+                            <div id="divToAttach"></div>
+
+                          </v-row>
+                        </v-sheet>
+                      </v-col>
+
+                      <div class="" id="lettersToAttach">
+
+                      </div>
+
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </div>
+
+            </v-responsive>
+          </v-col>
+
+          <v-col cols="12" lg="6" md="4">
+            <v-responsive :aspect-ratio="16 / 9" class="pa-4 elevation-0">
+
+              <!-- Form -->
+              <div class="">
+                <div class="form_Title">Map Details</div>
+
+                <v-row>
+                  <v-col cols="6">
+                    <v-sheet class="pa-2" color="#151515" theme="dark">
+                      <!-- Texts -->
+                      <v-row>
+                        <v-col cols="6">
+                          <!-- Map Name -->
+                          <v-text-field v-model="mapTitle" label="Map Name"></v-text-field>
+                        </v-col>
+                        <v-col cols="6">
+                          <!-- Size -->
+                          <v-text-field v-model="size" label="Units"></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <!-- Description -->
+                      <v-textarea v-model="description" label="Description" rows="3"></v-textarea>
+
+                      <!-- Gameplay -->
+                      <v-textarea v-model="gameplay" label="Gameplay Hooks" rows="5"></v-textarea>
+
+                      <v-row>
+                        <v-col cols="6">
+                          <div class="form_Title" style="margin-top: 0.5vw;">Top-Down Layout</div>
+                          <v-file-input type="file" :id="'test' + i" clearable chips label="Top-Down Layout"
+                            @change="onFileChange($event, i)"></v-file-input>
+                        </v-col>
+
+                        <v-col cols="6">
+                          <div class="form_Title" style="margin-top: 0.5vw;">Concept Art</div>
+                          <v-file-input type="file" :id="'test' + i" clearable chips label="Concept Art"
+                            @change="onFileChange($event, i)"></v-file-input>
+                        </v-col>
+                      </v-row>
+
+                      <!-- Images -->
 
 
-            <!-- POI -->
-            <div class="form_Title" style="margin-top: 0.5vw;">Points of interest</div>
 
-            <!-- Create POI -->
-            <v-dialog v-model="POI_dialog" width="auto">
-              <template v-slot:activator="{ props }">
-                <v-btn size="large" rounded="xl" color="primary" v-bind="props" prepend-icon="mdi-plus"
-                  style="margin-bottom: 0.5vw;">
-                  Create POI
-                </v-btn>
-              </template>
 
-              <v-card width="900" class="rounded-card">
-                <v-form class="pa-8" ref="POIDialogForm">
-                  <v-col cols="12">
+                    </v-sheet>
+                  </v-col>
+                </v-row>
 
-                    <h1>POI {{ lettersGroup[poi_index] }}</h1>
 
-                    <!-- POI Name -->
-                    <v-text-field v-model="POITitle" label="Name"></v-text-field>
 
-                    <!-- Letter
+
+                <!-- POI -->
+                <div class="form_Title" style="margin-top: 0.5vw;">Points of interest</div>
+
+                <!-- Create POI -->
+                <v-dialog v-model="POI_dialog" width="auto">
+                  <template v-slot:activator="{ props }">
+                    <v-btn size="large" rounded="xl" color="primary" variant="outlined" v-bind="props"
+                      prepend-icon="mdi-plus" style="margin-bottom: 0.5vw;">
+                      Create POI
+                    </v-btn>
+                  </template>
+
+                  <v-card width="900" class="rounded-card">
+                    <v-form class="pa-8" ref="POIDialogForm">
+                      <v-col cols="12">
+
+                        <h1>POI {{ lettersGroup[poi_index] }}</h1>
+
+                        <!-- POI Name -->
+                        <v-text-field v-model="POITitle" label="Name"></v-text-field>
+
+                        <!-- Letter
 <v-select v-model="letterSelected" disabled chips label="Select"
   :items="['A', 'B', 'C', 'D', 'E', 'F']"></v-select> -->
 
-                    <!-- Image upload -->
-                    <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
-                      @change="onFileChange($event, i)"></v-file-input>
+                        <!-- Image upload -->
+                        <v-file-input type="file" :id="'test' + i" clearable chips label="Image"
+                          @change="onFileChange($event, i)"></v-file-input>
 
-                    <v-btn @click="generateNewPOI" block size="large" rounded="xl" color="primary" v-bind="props"
-                      prepend-icon="mdi-plus">
-                      Generate New POI
-                    </v-btn>
+                        <v-btn @click="generateNewPOI" block size="large" rounded="xl" color="primary" v-bind="props"
+                          prepend-icon="mdi-plus">
+                          Generate New POI
+                        </v-btn>
 
-                  </v-col>
-                </v-form>
-                <v-card-actions>
-                  <v-btn color="primary" block @click="POI_dialog = false">Close</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-card>
-        </div>
-
-        <div class="contentSection" ref="printMe">
-          <v-card width="100%" color="grey-darken-4" class="squared-card elevation-0">
-            <v-card-text>
-              <v-row no-gutters>
+                      </v-col>
+                    </v-form>
+                    <v-card-actions>
+                      <v-btn color="primary" block @click="POI_dialog = false">Close</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
 
 
-                <v-col cols="12">
-                  <v-sheet class="pa-2 text-white" color="grey-darken-4">
-                    <!-- Map Name -->
-                    <p class="content_mapName" v-if="mapTitle == ''">Map Name</p>
-                    <p class="content_mapName" v-else>{{ mapTitle }}</p>
-                  </v-sheet>
-                </v-col>
+              </div>
 
-                <v-col cols="6">
-                  <v-sheet class="pa-2 text-white" color="grey-darken-4">
-                    <!-- Main Capsule -->
-                    <v-img class="content_mainCapsule" src="./assets/defaultimg.png" />
+            </v-responsive>
+          </v-col>
+        </v-row>
 
-                    <!-- Size -->
-                    <p class="content_subtitle" style="margin-top: 0.3vw;">Size</p>
-                    <p class="content_size" v-if="size == ''">0 units x 0 units</p>
-                    <p class="content_size" v-else>{{ size }}</p>
 
-                    <!-- Description -->
-                    <p class="content_subtitle" style="margin-top: 0.5vw;">Description</p>
-                    <div class="content_container">
-                      <p class="content_size" v-if="description == ''" style="white-space: pre-line">This is a description
-                      </p>
-                      <p class="content_size" v-else style="white-space: pre-line">{{ description }}</p>
-                    </div>
 
-                    <!-- Gameplay Hooks -->
-                    <p class="content_subtitle" style="margin-top: 0.5vw;">Gameplay Hooks</p>
-                    <div style="height: 2.5vw;">
-                      <p class="content_size" v-if="gameplay == ''" style="white-space: pre-line">This is a hook</p>
-                      <p class="content_size" v-else style="white-space: pre-line">{{ gameplay }}</p>
-                    </div>
-                  </v-sheet>
-                </v-col>
 
-                <v-col cols="6">
-                  <v-sheet class="text-white ml-3" color="grey-darken-4">
-                    <v-row no-gutters>
-                      <div id="divToAttach"></div>
 
-                    </v-row>
-                  </v-sheet>
-                </v-col>
 
-                <div class="" id="lettersToAttach">
-                
-                </div>
 
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </div>
+
+
+
 
         <div>
           <v-btn class="printButton" @click="printElement" size="large" rounded="xl" color="primary" v-bind="props"
             prepend-icon="mdi-download">
-            Export Map
+            Export
           </v-btn>
         </div>
 
@@ -172,8 +204,6 @@
 
       </v-window-item>
     </v-window>
-
-
   </v-card>
 
 
@@ -183,9 +213,8 @@
 
 <script>
 import html2canvas from 'html2canvas';
-
-
 import Moveable from "moveable";
+
 
 const moveable = new Moveable(document.body, {
   target: document.querySelector(".target"),
@@ -248,6 +277,8 @@ window.addEventListener("mousedown", e => {
 });
 
 
+
+
 export default {
   name: 'App',
   data() {
@@ -259,6 +290,8 @@ export default {
       description: '',
       gameplay: '',
       output: null,
+
+      mainCapsuleImg: "./assets/defaultimg.png",
 
       POI_dialog: false,
       POITitle: '',
@@ -315,7 +348,7 @@ export default {
       const img = document.createElement("img");
       //console.log(this.poi_images[this.poi_index])
       img.src = this.poi_images[this.poi_index];
-      img.style = "width: 11vw; display: block; margin-right: 0.7vw;";
+      img.style = "width: 11vw; display: block; margin-right: 1rem;";
       newDiv.appendChild(img);
 
       console.log(this.leftSpacing);
@@ -342,7 +375,7 @@ export default {
       this.poi_index++;
       this.leftSpacing = this.leftSpacing + 1.5;
 
-      
+
 
       // Reset form
       this.$refs.POIDialogForm.reset();
@@ -387,21 +420,21 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2vw;
+  margin-bottom: 1vw;
 }
 
 .formSection {
   text-align: left;
   margin-top: 20px;
-  margin-left: 20%;
-  margin-right: 20%;
+  /*margin-left: 20%;
+  margin-right: 20%;*/
 }
 
 .contentSection {
   text-align: left;
-  margin-top: 4vw;
+  /*margin-top: 4vw;
   margin-left: 25%;
-  margin-right: 25%;
+  margin-right: 25%;*/
 }
 
 .formCard {
@@ -438,7 +471,7 @@ body {
 }
 
 .viewport-sizing1 {
-  font-size: 1vw;
+  font-size: 1rem;
 }
 
 .printButton {
@@ -451,18 +484,18 @@ body {
 
 .content_mapName {
   margin: 0;
-  font-size: 1vw;
+  font-size: 1.5rem
 }
 
 .content_size {
   margin-top: 0px;
   margin-bottom: 0vw;
-  font-size: 0.5vw;
+  font-size: 1rem
 }
 
 .content_subtitle {
-  font-size: 0.8vw;
   margin: 0vw;
+  font-size: 1rem
 }
 
 .content_container {
@@ -480,7 +513,6 @@ body {
 
 .form_Title {
   margin-bottom: 0.3vw;
-  font-size: 0.7vw;
 }
 
 .letters_legendSection {
