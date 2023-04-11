@@ -9,13 +9,6 @@
     <v-window v-model="tab">
       <v-window-item :value="1">
 
-
-
-
-
-
-
-
         <!-- Tab 1 -->
         <div class="formSection">
           <v-card class="formCard rounded-card" variant="tonal">
@@ -110,6 +103,7 @@
             <v-card-text>
               <v-row no-gutters>
 
+
                 <v-col cols="12">
                   <v-sheet class="pa-2 text-white" color="grey-darken-4">
                     <!-- Map Name -->
@@ -154,6 +148,10 @@
                   </v-sheet>
                 </v-col>
 
+                <div class="" id="lettersToAttach">
+                
+                </div>
+
               </v-row>
             </v-card-text>
           </v-card>
@@ -162,7 +160,7 @@
         <div>
           <v-btn class="printButton" @click="printElement" size="large" rounded="xl" color="primary" v-bind="props"
             prepend-icon="mdi-download">
-            Print Div
+            Export Map
           </v-btn>
         </div>
 
@@ -174,6 +172,8 @@
 
       </v-window-item>
     </v-window>
+
+
   </v-card>
 
 
@@ -183,6 +183,70 @@
 
 <script>
 import html2canvas from 'html2canvas';
+
+
+import Moveable from "moveable";
+
+const moveable = new Moveable(document.body, {
+  target: document.querySelector(".target"),
+  // If the container is null, the position is fixed. (default: parentElement(document.body))
+  container: document.body,
+  draggable: true,
+  resizable: false,
+  scalable: false,
+  rotatable: false,
+  warpable: false,
+  // Enabling pinchable lets you use events that
+  // can be used in draggable, resizable, scalable, and rotateable.
+  pinchable: false, // ["resizable", "scalable", "rotatable"]
+  origin: true,
+  keepRatio: true,
+  // Resize, Scale Events at edges.
+  edge: false,
+  throttleDrag: 0,
+  throttleResize: 0,
+  throttleScale: 0,
+  throttleRotate: 0,
+  className: "moveable1",
+});
+
+
+
+/* draggable */
+moveable.on("dragStart", ({ target, clientX, clientY }) => { // eslint-disable-line no-unused-vars
+  console.log("onDragStart", target);
+}).on("drag", ({
+  target, transform, // eslint-disable-line no-unused-vars
+  left, top, right, bottom, // eslint-disable-line no-unused-vars
+  beforeDelta, beforeDist, delta, dist, // eslint-disable-line no-unused-vars
+  clientX, clientY, // eslint-disable-line no-unused-vars
+}) => {
+  console.log("onDrag left, top", left, top);
+  target.style.left = `${left}px`;
+  target.style.top = `${top}px`;
+  // console.log("onDrag translate", dist);
+  // target!.style.transform = transform;
+}).on("dragEnd", ({ target, isDrag, clientX, clientY }) => { // eslint-disable-line no-unused-vars
+  console.log("onDragEnd", target, isDrag);
+});
+
+
+
+window.addEventListener("mousedown", e => {
+  if (e.target.id === "movableCardID") {
+    moveable.setState({
+      target: e.target,
+    }, () => {
+      moveable.dragStart(e);
+    });
+  }
+  else {
+    moveable.setState({
+      target: null,
+    })
+  }
+});
+
 
 export default {
   name: 'App',
@@ -212,6 +276,7 @@ export default {
       poi_title: new Array(),
       poi_images: new Array(),
       poi_index: 0,
+      leftSpacing: 1.5,
 
       lettersGroup: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'],
     }
@@ -248,12 +313,26 @@ export default {
 
       // Add image
       const img = document.createElement("img");
-
-      console.log(this.poi_images[this.poi_index])
-
+      //console.log(this.poi_images[this.poi_index])
       img.src = this.poi_images[this.poi_index];
       img.style = "width: 11vw; display: block; margin-right: 0.7vw;";
       newDiv.appendChild(img);
+
+      console.log(this.leftSpacing);
+
+      // add letter
+      const newLetter = document.createElement("div");
+      // and give it some content
+      const newContentLetter = document.createTextNode(this.lettersGroup[this.poi_index]);
+      newLetter.style = "background-color: #fecb00; width:30px; height:30px; position: absolute; top: 3.5vw; left: " + this.leftSpacing + "vw;" + " text-align:center;";
+      newContentLetter.style = "font-size: 0.7vw; text-align: center;";
+      newLetter.id = "movableCardID";
+      // add the text node to the newly created div
+      newLetter.appendChild(newContentLetter);
+      // add the newly created element and its content into the DOM
+      var letterSection = document.getElementById("lettersToAttach");
+      letterSection.parentNode.insertBefore(newLetter, letterSection);
+
 
       // add the newly created element and its content into the DOM
       var currentDiv = document.getElementById("divToAttach");
@@ -261,6 +340,9 @@ export default {
 
       // Increment index
       this.poi_index++;
+      this.leftSpacing = this.leftSpacing + 1.5;
+
+      
 
       // Reset form
       this.$refs.POIDialogForm.reset();
@@ -399,5 +481,13 @@ body {
 .form_Title {
   margin-bottom: 0.3vw;
   font-size: 0.7vw;
+}
+
+.letters_legendSection {
+  position: absolute;
+  top: 3.5vw;
+  left: 1.5vw;
+  width: 20px;
+  height: 20px;
 }
 </style>
