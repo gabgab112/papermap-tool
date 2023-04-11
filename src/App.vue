@@ -31,7 +31,7 @@
                       <v-col cols="6">
                         <v-sheet class="pa-2 text-white" color="grey-darken-4">
                           <!-- Main Capsule -->
-                          <v-img class="content_mainCapsule" src="" id="mainCapsule"/>
+                          <v-img class="content_mainCapsule" src="./assets/defaultimg.png" id="mainCapsule"/>
 
                           <!-- Size -->
                           <p class="content_subtitle font-weight-medium" style="margin-top: 0.8rem;">Size</p>
@@ -204,6 +204,8 @@
 
       </v-window-item>
     </v-window>
+
+
   </v-card>
 
 
@@ -214,7 +216,6 @@
 <script>
 import html2canvas from 'html2canvas';
 import Moveable from "moveable";
-
 
 const moveable = new Moveable(document.body, {
   target: document.querySelector(".target"),
@@ -276,7 +277,8 @@ window.addEventListener("mousedown", e => {
   }
 });
 
-
+// main Capsule
+//document.getElementById('mainCapsule').src = this.mainCapsuleImg;
 
 
 export default {
